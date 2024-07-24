@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display CSV as Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h2>CSV Table</h2>
+<table id="csvTable"></table>
+
+<script>
+    function loadCSVFile(file) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', file, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const csvData = xhr.responseText;
+                const table = document.getElementById('csvTable');
+                const rows = csvData.split('\n');
+
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i].split(',');
+                    const tr = document.createElement('tr');
+
+                    for (let j = 0; j < row.length; j++) {
+                        const td = document.createElement('td');
+                        td.textContent = row[j];
+                        tr.appendChild(td);
+                    }
+
+                    table.appendChild(tr);
+                }
+            } else {
+                console.error('Error loading CSV file');
+            }
+        };
+        xhr.send();
+    }
+
+    // Replace 'your-csv-file.csv' with the actual path or URL of your CSV file
+    loadCSVFile("/Users/navpriy/Downloads/merged_output.csv");
+</script>
+</body>
+</html>
