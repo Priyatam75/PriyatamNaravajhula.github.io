@@ -10,18 +10,14 @@
 <script>
     // Function to read the text file
     function readTextFile(filePath) {
-        var fileReader = new FileReader();
-
-        fileReader.onload = function() {
-            var fileContent = fileReader.result;
-            document.getElementById('fileContent').textContent = fileContent;
-        };
-
-        fileReader.onerror = function() {
-            console.error('Error reading the file');
-        };
-
-        fileReader.readAsText(filePath);
+        fetch(filePath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('fileContent').textContent = data;
+            })
+            .catch(error => {
+                console.error('Error reading the file:', error);
+            });
     }
 
     // Assuming the text file is in the same directory as the HTML file
