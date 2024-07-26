@@ -1,27 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Display Text File Contents</title>
+    <title>Display Text Files Contents</title>
+    <style>
+        /* Optional: Style the pre element for better readability */
+        pre {
+            font-family: monospace;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-<h1>Contents of text.txt</h1>
-<pre id="fileContent"></pre>
+<h1>Contents of Text Files in 'images' Folder</h1>
+
+<!-- Container to hold the file contents -->
+<div id="fileContents"></div>
 
 <script>
-    // Function to read the text file
+    // Array of text file paths to display
+    const filePaths = [
+        'images/jira_1.txt',
+        'images/jira_2.txt',
+        'images/jira_3.txt'
+        // Add more file paths as needed
+    ];
+
+    // Function to read a text file
     function readTextFile(filePath) {
-        fetch(filePath)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('fileContent').textContent = data;
-            })
-            .catch(error => {
-                console.error('Error reading the file:', error);
+        return fetch(filePath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.text();
             });
     }
 
-    // Assuming the text file is in the same directory as the HTML file
-    readTextFile('images/jira_1.txt');
+    // Function to display the contents of all text files
+    function displayFiles(filePaths) {
+        const fileContentsContainer = document.getElementById('fileContents');
+
+        filePaths.forEach(filePath => {
+            readTextFile(filePath)
+                .then(data => {
+                    // Create a new section for each file
+                    const fileSection = document.createElement('section');
+                    fileSection.innerHTML = `<h2>${filePath}</h2><pre>${data}</pre>`;
+                    fileContentsContainer.appendChild(fileSection);
+                })
+                .catch(error => {
+                    const errorSection = document.createElement('section');
+                    errorSection.innerHTML = `<h2>${filePath}</h2><pre>Error loading file: ${error.message}</pre>`;
+                    fileContentsContainer.appendChild(errorSection);
+                });
+        });
+    }
+
+    // Call the displayFiles function with the list of file paths
+    displayFiles(filePaths);
 </script>
 </body>
 </html>
