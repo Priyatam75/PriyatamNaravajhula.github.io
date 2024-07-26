@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spark-331-JIRA</title>
+</head>
+<body>
+<h1>Contents of text.txt</h1>
+<pre id="fileContent"></pre>
+
+<script>
+    // Function to read the text file
+    function readTextFile(filePath) {
+        fetch(filePath)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('fileContent').textContent = data;
+            })
+            .catch(error => {
+                console.error('Error reading the file:', error);
+            });
+    }
+
+    // Assuming the text file is in the same directory as the HTML file
+    readTextFile("images/jira_4.txt");
+</script>
+</body>
+</html>
